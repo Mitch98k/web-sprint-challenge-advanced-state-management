@@ -1,24 +1,74 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { addSmurf } from '../actions';
 
 class AddForm extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            info: {
+                name: '',
+                position: '',
+                nickname: '',
+                description: ''
+            }
+        }
+    }
+    handleChange = e => {
+        this.setState({info: {[e.target.name]: e.target.value}})
+    }
+
+    handleSubmit = e => {
+        e.preventDefault();
+        addSmurf();
+    }
 
     render() {
         return(<section>
+            {console.log(this.state.info)}
             <h2>Add Smurf</h2>
             <form>
                 <div className="form-group">
                     <label htmlFor="name">Name:</label><br/>
                     <input onChange={this.handleChange} name="name" id="name" />
+                    <label htmlFor="position">Position:</label>
+                    <input onChange={this.handleChange} name="position" id="position" />
+                    <label htmlFor="nickname">Nickname:</label>
+                    <input onChange={this.handleChange} name="nickname" id="nickname" />
+                    <label htmlFor="description">Description:</label>
+                    <input onChange={this.handleChange} name="description" id="description" />
+                    
+                    {this.props.isLoading && <h3>Loading</h3>}
+
+                    {this.props.smurfs && this.props.smurfs.map(smurf => (
+                        <h3 key={smurf.id}>
+                        pame: {smurf.name},
+                        position: {smurf.position},
+                        nickname: {smurf.nickname},
+                        description: {smurf.description}
+                        </h3>
+                    ))}
+
+                    {this.props.error && <h3>{this.props.error}</h3>}
                 </div>
 
                 <div data-testid="errorAlert" className="alert alert-danger" role="alert">Error: </div>
-                <button>Submit Smurf</button>
+                <button onClick={this.handleSubmit}>Submit Smurf</button>
             </form>
         </section>);
     }
 }
 
-export default AddForm;
+const mapStateToProps = state => {
+    return {
+        smurfs: state.smurfs,
+        isLoading: state.isLoading,
+        error: state.error
+    };
+};
+
+export default connect(mapStateToProps, { addSmurf })(AddForm);
 
 //Task List:
 //1. Add in all necessary import components and library methods.
