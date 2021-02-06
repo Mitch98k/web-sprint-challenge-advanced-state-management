@@ -1,14 +1,39 @@
 import React from 'react';
+import axios from 'axios';
+import { connect } from 'react-redux';
+
+import { getSmurfs } from '../actions';
+
+import Smurf from './Smurf';
 
 export class SmurfDisplay extends React.Component {
+    componentDidMount() {
+        getSmurfs();
+    //     axios.get('http://localhost:3333/smurfs')
+    // .then(res => {
+    //     console.log(res);
+    // })
+    // .catch(err => {
+    //     console.log(err);
+    // })
+    }
+
     render() {
-        return(<div>
-            
+        return(
+        <div>
+            <Smurf />
         </div>)
     }
 }
 
-export default SmurfDisplay;
+const mapStateToProps = state => {
+    return {
+        smurfs: state.smurfs,
+        isLoading: state.isLoading
+    }
+}
+
+export default connect(mapStateToProps, {})(SmurfDisplay);
 
 //Task List:
 //1. Import in all needed components and library methods.
